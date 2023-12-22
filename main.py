@@ -1,12 +1,14 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QMessageBox
+import typing
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QLabel, QPushButton, QMessageBox
 
 
-# some other widgets: QLineEdit, QRadioButton, QComboBox, QCheckBox, QMenuBar, QToolBar, QTab, QScrollBar
-#                     QSplitter, QDock
+class MainWindow(QMainWindow):
+  def __init__(self):
+    QMainWindow.__init__(self)
+    
 
-
-# Layouts and themes: QBoxLayout, QGridLayout
 
 def dialog():
   mbox = QMessageBox()
@@ -21,7 +23,7 @@ if __name__ == "__main__":
   app = QApplication(sys.argv)
   app.setStyle("Fusion")
   w   = QWidget()
-  w.resize(300,300)
+  w.resize(700,700)
   w.setWindowTitle("Alina HoJung Na")
 
   label = QLabel(w)
