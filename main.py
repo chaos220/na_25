@@ -1,7 +1,8 @@
 from PySide6.QtGui import QMouseEvent, QAction, QPalette, QColor
 from PySide6.QtWidgets import *
+from PySide6 import QtCore
 
-import sys
+import sys, random
 
 class Color(QWidget):
 
@@ -13,6 +14,91 @@ class Color(QWidget):
         palette.setColor(QPalette.Window, QColor(color))
         self.setPalette(palette)
 
+class coordinates(QWidget):
+
+    def __init__(self):
+        super(coordinates, self).__init__()
+
+        self.layout = QVBoxLayout(self)
+
+        dms_layout = QGridLayout()
+        dd_layout = QGridLayout()
+        ddm_layout = QGridLayout()
+
+        self.layout.addLayout(dms_layout)
+        self.layout.addLayout(dd_layout)
+        self.layout.addLayout(ddm_layout)
+
+        dms_lat  = QLabel("Latitude")
+        dms_long = QLabel("Longitude")
+        dms_lat_inp  = QPlainTextEdit()
+        dms_long_inp = QPlainTextEdit()
+
+        dd_lat  = QLabel("Latitude")
+        dd_long = QLabel("Longitude")
+        dd_lat_inp  = QPlainTextEdit()
+        dd_long_inp = QPlainTextEdit()
+
+        ddm_lat  = QLabel("Latitude")
+        ddm_long = QLabel("Longitude")
+        ddm_lat_inp  = QPlainTextEdit()
+        ddm_long_inp = QPlainTextEdit()
+
+
+        dms_layout.addWidget(dms_lat,     0,0)
+        dms_layout.addWidget(dms_long,    1,0)
+        dms_layout.addWidget(dms_lat_inp, 0,1)
+        dms_layout.addWidget(dms_long_inp,1,1)
+
+        dd_layout.addWidget(dd_lat,     0,0)
+        dd_layout.addWidget(dd_long,    1,0)
+        dd_layout.addWidget(dd_lat_inp, 0,1)
+        dd_layout.addWidget(dd_long_inp,1,1)
+
+        ddm_layout.addWidget(ddm_lat,     0,0)
+        ddm_layout.addWidget(ddm_long,    1,0)
+        ddm_layout.addWidget(ddm_lat_inp, 0,1)
+        ddm_layout.addWidget(ddm_long_inp,1,1)
+
+
+        items = []
+        for layout in (self.layout.itemAt(i) for i in range(self.layout.count())):
+             for c in range(layout.count()):
+                  items.append(layout.itemAt(c).widget())
+
+        for i in items:
+            if isinstance(i, QPlainTextEdit):
+                i.setMaximumHeight(30)
+
+
+        self.show()
+
+class alina_compliments(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.comps = ["your eyes", 
+                      "how strong you are", 
+                      "your pretty face", 
+                      "the way you search up songs by some lyric you remember instead of their name lool",
+                      "the way you fit against me"]
+        
+
+        self.button = QPushButton("AKELA")
+        self.text = QLabel("I like")
+        self.text.setWordWrap(True)
+        self.text.setAlignment(QtCore.Qt.AlignCenter)
+        self.layout = QVBoxLayout(self)
+        self.layout.addWidget(self.text)
+        self.layout.addWidget(self.button)
+
+        self.button.clicked.connect(self.magic)
+
+    @QtCore.Slot()
+    def magic(self):
+        self.text.setText(random.choice(self.comps))
+
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -23,60 +109,48 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(400, 300)
         self.setMaximumSize(1200,900)
 
-        self.button = QPushButton("Press me")
-        self.button.setCheckable(True)
-        self.button.clicked.connect(self.button_clicked)
+        page_layout = QVBoxLayout()
+        button_layout = QHBoxLayout()
+        self.stacked_layout = QStackedLayout()
 
-        self.label = QLabel()
+        page_layout.addLayout(button_layout)
+        page_layout.addLayout(self.stacked_layout)
 
-        self.input = QLineEdit()
-        self.input.textChanged.connect(self.label.setText)
+        self.button_r = QPushButton("RED")
+        self.button_g = QPushButton("GREEN")
+        self.button_b = QPushButton("BLUE")
 
-        layout = QVBoxLayout()
-        layout1 = QHBoxLayout()
-        layout2 = QVBoxLayout()
-        layout3 = QVBoxLayout()
-
-        layout1.addLayout(layout2)
-        layout1.addWidget(Color('green'))
-
-        layout2.addWidget(Color('red'))
-        layout2.addWidget(Color('yellow'))
-        layout2.addWidget(Color('purple'))
+        button_layout.addWidget(self.button_r)
+        button_layout.addWidget(self.button_g)
+        button_layout.addWidget(self.button_b)
         
-        layout1.addLayout(layout2)
+        # self.stacked_layout.addWidget(coordinates())
+        self.stacked_layout.addWidget(alina_compliments())
+        self.stacked_layout.addWidget(coordinates())
+        self.stacked_layout.addWidget(Color("blue"))
 
-        layout3.addWidget(Color('purple'))
-        layout3.addWidget(Color('orange'))
-        layout3.addWidget(self.button)
-
-        layout1.addLayout(layout3)
-        # layout.addWidget(self.input)
-        # layout.addWidget(self.label)
-        # layout.addWidget(self.button)
-        layout.addWidget(self.widget1)
+        self.button_r.pressed.connect(self.show_tab_r)
+        self.button_g.pressed.connect(self.show_tab_g)
+        self.button_b.pressed.connect(self.show_tab_b)
 
         container = QWidget()
-        container.setLayout(layout1)
-
+        container.setLayout(page_layout)
         self.setCentralWidget(container)
 
         self.show()
 
+    def show_tab_r(self):
+        self.stacked_layout.setCurrentIndex(0)
+
+    def show_tab_g(self):
+        self.stacked_layout.setCurrentIndex(1)
+
+    def show_tab_b(self):
+        self.stacked_layout.setCurrentIndex(2)
+
     def button_clicked(self):
         print("Button was clicked")
 
-    def mouseMoveEvent(self, e):
-        self.label.setText("mouseMoveEvent")
-
-    def mousePressEvent(self, e):
-        self.label.setText("mousePressEvent")
-
-    def mouseReleaseEvent(self, e):
-        self.label.setText("mouseReleaseEvent")
-
-    def mouseDoubleClickEvent(self, e):
-        self.label.setText("mouseDoubleClickEvent")
 
     def contextMenuEvent(self, e):
         context = QMenu(self)
@@ -91,3 +165,17 @@ if __name__ == "__main__":
     window = MainWindow()
 
     app.exec()
+
+
+"""
+page 1 = lat/long conversions
+
+
+page 2 = smth with akela, maybe picture slide show
+pledge allegiance - some type of puzzle/code?
+
+page 3 = song 
+
+page 4 = to-do list or reminder 
+
+"""
