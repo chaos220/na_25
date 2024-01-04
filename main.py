@@ -31,18 +31,24 @@ class coordinates(QWidget):
         self.ddm_ns_layout = QHBoxLayout()
         self.ddm_ew_layout = QHBoxLayout()
 
+        self.clear_button  = QPushButton("Clear All")
+        
+
         self.layout.addLayout(self.dms_layout)
+        self.layout.addSpacing(18)
         self.layout.addLayout(self.dd_layout)
+        self.layout.addSpacing(18)
         self.layout.addLayout(self.ddm_layout)
+        self.layout.addWidget(self.clear_button)
 
         # only allow floating point numbers
         validator = QRegularExpressionValidator((r'[0-9]+.[0-9]+'), self)
 
-        self.dms_label    = QLabel("DMS (Degrees, Minutes, Seconds)")
-        self.dms_label.setStyleSheet("font-weight: bold")
+        self.dms_label    = [QLabel("DMS"), QLabel("Degrees"), QLabel("Minutes"), QLabel("Seconds")]
+        for each in self.dms_label: each.setStyleSheet("font-weight: bold")
         self.dms_lat      = QLabel("Latitude")
         self.dms_long     = QLabel("Longitude")
-        self.dms_units    = [QLabel('"'), QLabel('"')]
+        self.dms_units    = [QLabel("\u00b0"), QLabel("'"), QLabel('"'), QLabel("\u00b0"), QLabel("'"), QLabel('"')]
         self.dms_lat_inp  = [QLineEdit(), QLineEdit(), QLineEdit()]
         self.dms_long_inp = [QLineEdit(), QLineEdit(), QLineEdit()]
         self.dms_convert  = QPushButton("Convert")
@@ -92,8 +98,8 @@ class coordinates(QWidget):
         self.ddm_ew_layout.addWidget(self.ddm_radio_e)
         self.ddm_ew_layout.addWidget(self.ddm_radio_w)
 
-        self.dd_label    = QLabel("DD (Decimal Degrees)")
-        self.dd_label.setStyleSheet("font-weight: bold")
+        self.dd_label    = [QLabel("DD"), QLabel("Decimal Degrees")]
+        for each in self.dd_label: each.setStyleSheet("font-weight: bold")
         self.dd_lat      = QLabel("Latitude")
         self.dd_long     = QLabel("Longitude")
         self.dd_lat_inp  = [QLineEdit()]
@@ -101,11 +107,11 @@ class coordinates(QWidget):
         self.dd_convert  = QPushButton("Convert")
         self.dd_convert.clicked.connect(self.do_dd_convert)
 
-        self.ddm_label    = QLabel("DDM (Degrees, Decimal Minutes)")
-        self.ddm_label.setStyleSheet("font-weight: bold")
+        self.ddm_label    = [QLabel("DDM"), QLabel("Degrees"), QLabel("Decimal Minutes")]
+        for each in self.ddm_label: each.setStyleSheet("font-weight: bold")
         self.ddm_lat      = QLabel("Latitude")
         self.ddm_long     = QLabel("Longitude")
-        self.ddm_units    = [QLabel("'"), QLabel("'")]
+        self.ddm_units    = [QLabel("\u00b0"), QLabel("'"), QLabel("\u00b0"), QLabel("'")]
         self.ddm_lat_inp  = [QLineEdit(), QLineEdit()]
         self.ddm_long_inp = [QLineEdit(), QLineEdit()]
         self.ddm_convert  = QPushButton("Convert")
@@ -120,75 +126,127 @@ class coordinates(QWidget):
         for each in self.ddm_long_inp: each.setValidator(validator)
         
 
-        self.dms_layout.addWidget(self.dms_label,       0,0,1,3,QtCore.Qt.AlignLeft)
+        self.dms_layout.addWidget(self.dms_label[0],    0,0)
+        self.dms_layout.addWidget(self.dms_label[1],    0,1)
+        self.dms_layout.addWidget(self.dms_label[2],    0,3)
+        self.dms_layout.addWidget(self.dms_label[3],    0,5)
+        
         self.dms_layout.addWidget(self.dms_lat,         1,0)
         self.dms_layout.addWidget(self.dms_long,        2,0)
 
         self.dms_layout.addWidget(self.dms_lat_inp[0],  1,1)
         self.dms_layout.addWidget(self.dms_long_inp[0], 2,1)
-        self.dms_layout.addWidget(self.dms_lat_inp[1],  1,2)
-        self.dms_layout.addWidget(self.dms_long_inp[1], 2,2)
-        self.dms_layout.addWidget(self.dms_lat_inp[2],  1,3)
-        self.dms_layout.addWidget(self.dms_long_inp[2], 2,3)
-        
-        self.dms_layout.addWidget(self.dms_units[0],    1,4)
-        self.dms_layout.addWidget(self.dms_units[1],    2,4)
-        self.dms_layout.addWidget(self.dms_convert,     3,0)
-        self.dms_layout.addLayout(self.dms_ns_layout,   1,5)
-        self.dms_layout.addLayout(self.dms_ew_layout,   2,5)
+        self.dms_layout.addWidget(self.dms_units[0],    1,2)
+        self.dms_layout.addWidget(self.dms_units[3],    2,2)
 
-        self.dd_layout.addWidget(self.dd_label,       0,0,1,3,QtCore.Qt.AlignLeft)
+        self.dms_layout.addWidget(self.dms_lat_inp[1],  1,3)
+        self.dms_layout.addWidget(self.dms_long_inp[1], 2,3)
+        self.dms_layout.addWidget(self.dms_units[1],    1,4)
+        self.dms_layout.addWidget(self.dms_units[4],    2,4)
+
+        self.dms_layout.addWidget(self.dms_lat_inp[2],  1,5)
+        self.dms_layout.addWidget(self.dms_long_inp[2], 2,5)
+        self.dms_layout.addWidget(self.dms_units[2],    1,6)
+        self.dms_layout.addWidget(self.dms_units[5],    2,6)
+        
+        
+        self.dms_layout.addWidget(self.dms_convert,     3,0)
+        self.dms_layout.addLayout(self.dms_ns_layout,   1,7)
+        self.dms_layout.addLayout(self.dms_ew_layout,   2,7)
+
+        self.dd_layout.addWidget(self.dd_label[0],    0,0)
+        self.dd_layout.addWidget(self.dd_label[1],    0,1)
         self.dd_layout.addWidget(self.dd_lat,         1,0)
         self.dd_layout.addWidget(self.dd_long   ,     2,0)
         self.dd_layout.addWidget(self.dd_lat_inp[0],  1,1)
         self.dd_layout.addWidget(self.dd_long_inp[0], 2,1)
         self.dd_layout.addWidget(self.dd_convert,     3,0)
 
-        self.ddm_layout.addWidget(self.ddm_label,       0,0,1,3,QtCore.Qt.AlignLeft)
+        self.ddm_layout.addWidget(self.ddm_label[0],    0,0)
+        self.ddm_layout.addWidget(self.ddm_label[1],    0,1)
+        self.ddm_layout.addWidget(self.ddm_label[2],    0,3)
         self.ddm_layout.addWidget(self.ddm_lat,         1,0)
         self.ddm_layout.addWidget(self.ddm_long,        2,0)
+
         self.ddm_layout.addWidget(self.ddm_lat_inp[0],  1,1)
         self.ddm_layout.addWidget(self.ddm_long_inp[0], 2,1)
-        self.ddm_layout.addWidget(self.ddm_lat_inp[1],  1,2)
-        self.ddm_layout.addWidget(self.ddm_long_inp[1], 2,2)
-        self.ddm_layout.addWidget(self.ddm_units[0],    1,3)
-        self.ddm_layout.addWidget(self.ddm_units[1],    2,3)
+        self.ddm_layout.addWidget(self.ddm_units[0],    1,2)
+        self.ddm_layout.addWidget(self.ddm_units[2],    2,2)
+        self.ddm_layout.addWidget(self.ddm_lat_inp[1],  1,3)
+        self.ddm_layout.addWidget(self.ddm_long_inp[1], 2,3)
+        self.ddm_layout.addWidget(self.ddm_units[1],    1,4)
+        self.ddm_layout.addWidget(self.ddm_units[3],    2,4)
+        
         self.ddm_layout.addWidget(self.ddm_convert,     3,0)
-        self.ddm_layout.addLayout(self.ddm_ns_layout,   1,4)
-        self.ddm_layout.addLayout(self.ddm_ew_layout,   2,4)
+        self.ddm_layout.addLayout(self.ddm_ns_layout,   1,5)
+        self.ddm_layout.addLayout(self.ddm_ew_layout,   2,5)
 
 
         self.show()
 
     def do_dms_convert(self):
-        print("DMS convert button pressed")
-        self.check_empty(self.dms_lat_inp, self.dms_long_inp)
-        print(self.dms_ns_group.checkedId())
-        print(self.dms_ew_group.checkedId())
+        if not (self.check_empty(self.dms_lat_inp, self.dms_long_inp)):
+
+            ddm_lat  = [float(self.dms_lat_inp[0].text()),  float(self.dms_lat_inp[1].text())  + float(self.dms_lat_inp[2].text())/60]
+            ddm_long = [float(self.dms_long_inp[0].text()), float(self.dms_long_inp[1].text()) + float(self.dms_long_inp[2].text())/60]
+
+            dd_lat   = [float(self.dms_lat_inp[0].text())  + float(self.dms_lat_inp[1].text())/60  + float(self.dms_lat_inp[2].text())/3600]
+            dd_long  = [float(self.dms_long_inp[0].text()) + float(self.dms_long_inp[1].text())/60 + float(self.dms_long_inp[2].text())/3600]
+            
+            for i in range(len(ddm_lat)):
+                self.ddm_lat_inp[i].setText(str(ddm_lat[i]))
+                self.ddm_long_inp[i].setText(str(ddm_long[i]))
+
+            for i in range(len(dd_lat)):
+                self.dd_lat_inp[i].setText(str(dd_lat[i]))
+                self.dd_long_inp[i].setText(str(dd_long[i]))
+
 
     def do_dd_convert(self):
-        print("DD convert button pressed")
-        self.check_empty(self.dd_lat_inp, self.dd_long_inp)
+        if not (self.check_empty(self.dd_lat_inp, self.dd_long_inp)):
+
+            dms_lat_whole   = int(float(self.dd_lat_inp[0].text()))
+            dms_lat_decimal = float(self.dd_lat_inp[0].text()) - dms_lat_whole
+
+            dms_long_whole   = int(float(self.dd_long_inp[0].text()))
+            dms_long_decimal = float(self.dd_long_inp[0].text()) - dms_long_whole
+
+            dms_lat  = [dms_lat_whole,  int(dms_lat_decimal*60),  (dms_lat_decimal*60 - (int(dms_lat_decimal*60)))*60]
+            dms_long = [dms_long_whole, int(dms_long_decimal*60), (dms_long_decimal*60 - (int(dms_long_decimal*60)))*60]
+
+            for i in range(len(dms_lat)):
+                self.dms_lat_inp[i].setText(str(round(dms_lat[i],8)))
+                self.dms_long_inp[i].setText(str(round(dms_long[i],8)))
+
+            self.do_dms_convert()
 
     def do_ddm_convert(self):
-        print("DDM convert button pressed")
-        self.check_empty(self.ddm_lat_inp, self.ddm_long_inp)
-        print(self.ddm_ns_group.checkedId())
-        print(self.ddm_ew_group.checkedId())
+        if not (self.check_empty(self.ddm_lat_inp, self.ddm_long_inp)):
+            dms_lat  = [float(self.ddm_lat_inp[0].text()),  int(float(self.ddm_lat_inp[1].text())),  (float(self.ddm_lat_inp[1].text())%1)*60]
+            dms_long = [float(self.ddm_long_inp[0].text()), int(float(self.ddm_long_inp[1].text())), (float(self.ddm_long_inp[1].text())%1)*60]
 
+            for i in range(len(dms_lat)):
+                self.dms_lat_inp[i].setText(str(round(dms_lat[i],8)))
+                self.dms_long_inp[i].setText(str(round(dms_long[i],8)))
+
+            self.do_dms_convert()
     
     def check_empty(self, lat_inps, long_imps):
+        empty = False
         for (a,b) in zip(lat_inps, long_imps):
             if (a.text() == "" or b.text() == ""):
                 self.empty_input_warning()
+                empty = True
                 break
-            else:
-                print(float(a.text()) + float(b.text()))
+        return empty
+        
 
     def empty_input_warning(self):
         mbox = QMessageBox()
         mbox.setText("You have one or more empty inputs.")
         mbox.exec_()
+
+
 
 class alina_compliments(QWidget):
     def __init__(self):
@@ -211,8 +269,12 @@ class alina_compliments(QWidget):
                       "(really like) how you brought akela to meet me when we went to rondeau",
                       "(LOVE) the clay pot you painted for me",
                       "that you bought me flowers :3",
-                      "(love love love) eating / sharing food with you :D"]
-        
+                      "(love love love) eating / sharing food with you :D",
+                      "your snack drawer (turned snack shelf) and how much you like it lololol",
+                      "also side note: is this super cringe... I don't even ever want to see you read these",
+                      "(+ very much appreciate) that you respect + go out of your way to be super considerate of my chosen dietery restrictions. I really really appreciate it a lot.",
+                      "how excited you got to get Joe Hisaishi tickets XD",
+                      "the way you always split the last bite of food to give to me"]
 
         self.button = QPushButton("AKELA")
         self.text = QLabel("I like")
@@ -236,7 +298,7 @@ class MainWindow(QMainWindow):
         self.widget1 = Color('red')
 
         self.setWindowTitle("Akela")
-        self.setMinimumSize(400, 300)
+        self.setMinimumSize(400, 400)
         self.setMaximumSize(1200,900)
 
         page_layout = QVBoxLayout()
@@ -246,8 +308,8 @@ class MainWindow(QMainWindow):
         page_layout.addLayout(button_layout)
         page_layout.addLayout(self.stacked_layout)
 
-        self.button_r = QPushButton("RED")
-        self.button_g = QPushButton("GREEN")
+        self.button_r = QPushButton("4U")
+        self.button_g = QPushButton("LAT/LONG")
         self.button_b = QPushButton("BLUE")
 
         button_layout.addWidget(self.button_r)
