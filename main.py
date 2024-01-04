@@ -31,7 +31,8 @@ class coordinates(QWidget):
         self.ddm_ns_layout = QHBoxLayout()
         self.ddm_ew_layout = QHBoxLayout()
 
-        self.clear_button  = QPushButton("Clear All")
+        clear_button  = QPushButton("Clear All")
+        
         
 
         self.layout.addLayout(self.dms_layout)
@@ -39,7 +40,9 @@ class coordinates(QWidget):
         self.layout.addLayout(self.dd_layout)
         self.layout.addSpacing(18)
         self.layout.addLayout(self.ddm_layout)
-        self.layout.addWidget(self.clear_button)
+        self.layout.addWidget(clear_button)
+
+        clear_button.clicked.connect(self.clear_all)
 
         # only allow floating point numbers
         validator = QRegularExpressionValidator((r'[0-9]+.[0-9]+'), self)
@@ -246,7 +249,18 @@ class coordinates(QWidget):
         mbox.setText("You have one or more empty inputs.")
         mbox.exec_()
 
+    def clear_all(self):
+        items = []
+        for layout in (self.layout.itemAt(i) for i in range(self.layout.count())):
+             print(layout)
+             if (type(layout) == QGridLayout):
+                for c in range(layout.count()):
+                    items.append(layout.itemAt(c).widget())
 
+        for i in items:
+            if isinstance(i, QLineEdit):
+                i.setText("")
+        
 
 class alina_compliments(QWidget):
     def __init__(self):
@@ -290,6 +304,28 @@ class alina_compliments(QWidget):
         self.text.setText(random.choice(self.comps))
 
 
+class akela(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.button = QPushButton("Pledge Allegiance")
+        self.text = QLabel("Welcome to Akela World")
+        self.text.setAlignment(QtCore.Qt.AlignCenter)
+        self.layout = QVBoxLayout(self)
+        self.layout.addWidget(self.text)
+        self.layout.addWidget(self.button)
+        self.button.clicked.connect(self.allegiance)
+
+
+    def allegiance(self):
+        mbox = QMessageBox()
+        mbox.setText("Your allegiance has been noted")
+        mbox.setDetailedText("Please report to headquarters within the next 18 hrs")
+        mbox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+        mbox.exec_()
+
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -310,7 +346,7 @@ class MainWindow(QMainWindow):
 
         self.button_r = QPushButton("4U")
         self.button_g = QPushButton("LAT/LONG")
-        self.button_b = QPushButton("BLUE")
+        self.button_b = QPushButton("A.N.")
 
         button_layout.addWidget(self.button_r)
         button_layout.addWidget(self.button_g)
@@ -318,7 +354,7 @@ class MainWindow(QMainWindow):
         
         self.stacked_layout.addWidget(alina_compliments())
         self.stacked_layout.addWidget(coordinates())
-        self.stacked_layout.addWidget(Color("blue"))
+        self.stacked_layout.addWidget(akela())
 
         self.button_r.pressed.connect(self.show_tab_r)
         self.button_g.pressed.connect(self.show_tab_g)
