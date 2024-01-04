@@ -288,7 +288,8 @@ class alina_compliments(QWidget):
                       "also side note: is this super cringe... I don't even ever want to see you read these",
                       "(+ very much appreciate) that you respect + go out of your way to be super considerate of my chosen dietery restrictions. I really really appreciate it a lot.",
                       "how excited you got to get Joe Hisaishi tickets XD",
-                      "the way you always split the last bite of food to give to me"]
+                      "the way you always split the last bite of food to give to me",
+                      "your voice"]
 
         self.button = QPushButton("AKELA")
         self.text = QLabel("I like")
@@ -392,56 +393,3 @@ if __name__ == "__main__":
     window = MainWindow()
 
     app.exec()
-
-
-"""
-page 1 = lat/long conversions
-
-
-page 2 = smth with akela, maybe picture slide show
-pledge allegiance - some type of puzzle/code?
-
-page 3 = song 
-
-page 4 = to-do list or reminder 
-
-"""
-
-
-'''
-
-class MoodExample(QGroupBox):
-
-    def __init__(self):
-        super(MoodExample, self).__init__()
-
-        # Create an array of radio buttons
-        moods = [QRadioButton("Happy"), QRadioButton("Sad"), QRadioButton("Angry")]
-
-        # Set a radio button to be checked by default
-        moods[0].setChecked(True)
-
-        # Radio buttons usually are in a vertical layout
-        button_layout = QVBoxLayout()
-
-        # Create a button group for radio buttons
-        self.mood_button_group = QButtonGroup()
-
-        for i in xrange(len(moods)):
-            # Add each radio button to the button layout
-            button_layout.addWidget(moods[i])
-            # Add each radio button to the button group & give it an ID of i
-            self.mood_button_group.addButton(moods[i], i)
-            # Connect each radio button to a method to run when it's clicked
-            self.connect(moods[i], SIGNAL("clicked()"), self.radio_button_clicked)
-
-        # Set the layout of the group box to the button layout
-        self.setLayout(button_layout)
-
-    #Print out the ID & text of the checked radio button
-    def radio_button_clicked(self):
-        print(self.mood_button_group.checkedId())
-        print(self.mood_button_group.checkedButton().text())
-
-
-'''
